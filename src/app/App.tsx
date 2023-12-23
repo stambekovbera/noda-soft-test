@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { Button } from "../shared/UI/Button/Button.tsx";
+import { getUserById, IUser, UserCard } from "../entities/User";
 
 export const App: React.FC = () => {
-    const [item, setItem] = useState<Record<number, User>>(null);
+    const [ item, setItem ] = useState<IUser | null>( null );
 
-    const receiveRandomUser = async () => {
-        const id = Math.floor(Math.random() * (10 - 1)) + 1;
-        const response = await fetch(`${URL}/${id}`);
-        const _user = (await response.json()) as User;
-        setItem(_user);
-    };
+    const receiveRandomUser = useCallback( async () => {
+        const id = Math.floor( Math.random() * ( 10 - 1 ) ) + 1;
+        const user = await getUserById( id );
+        setItem( () => user );
+    }, [] );
 
-    const handleButtonClick = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        event.stopPropagation();
+    const handleButtonClick = useCallback( () => {
         receiveRandomUser();
-    };
+    }, [ receiveRandomUser ] );
 
     return (
         <div>
             <header>Get a random user</header>
-            <Button onClick={handleButtonClick} />
-            <UserInfo user={item} />
+            <Button onClick={ handleButtonClick }>
+                Get
+            </Button>
+            <UserCard user={ item }/>
         </div>
     );
 };
