@@ -24,7 +24,7 @@ export const App: React.FC = () => {
         <div>
             <header>Get a random user</header>
             <Button onClick={ handleButtonClick }>
-                Get
+                Get random user
             </Button>
             <UserCard user={ item }/>
         </div>
