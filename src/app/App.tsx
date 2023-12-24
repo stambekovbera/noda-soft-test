@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Button } from "../shared/UI/Button/Button.tsx";
 import { getUserById, IUser, UserCard } from "../entities/User";
+import { useThrottle } from "../shared/hooks/useThrottle/useThrottle.ts";
 
 export const App: React.FC = () => {
     const [ item, setItem ] = useState<IUser | null>( null );
@@ -11,9 +12,13 @@ export const App: React.FC = () => {
         setItem( () => user );
     }, [] );
 
+    const {
+        throttledFunction
+    } = useThrottle( receiveRandomUser, 5000 );
+
     const handleButtonClick = useCallback( () => {
-        receiveRandomUser();
-    }, [ receiveRandomUser ] );
+        throttledFunction();
+    }, [ throttledFunction ] );
 
     return (
         <div>
